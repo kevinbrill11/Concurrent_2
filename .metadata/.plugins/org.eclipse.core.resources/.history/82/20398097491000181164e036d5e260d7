@@ -21,7 +21,7 @@ public class MonitorThreadSynch {
         	   numWaiting ++;
         	   index = parties - numWaiting;
         	   if(index == 0){
-        		   monitor.notifyAll();
+        		   notifyAll();
         		   numWaiting=0;
         	   }
         	   else{

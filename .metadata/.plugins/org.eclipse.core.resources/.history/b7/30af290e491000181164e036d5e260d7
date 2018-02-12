@@ -12,7 +12,8 @@ public class ThreadSynch {
 	
 	public ThreadSynch(int parties) {
 		this.parties = parties;
-				
+		
+		
 		block = new Semaphore(0);
 		lock = new Semaphore(1);
 		

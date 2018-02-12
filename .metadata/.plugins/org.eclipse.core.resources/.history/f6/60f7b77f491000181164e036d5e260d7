@@ -5,13 +5,12 @@
 
 public class MonitorThreadSynch {
 	private int numWaiting;
-	private Object monitor ;
+	private Object monitor;
 	private int parties;
 	
 	public MonitorThreadSynch(int parties) {
 		this.parties = parties;
 		numWaiting = 0;
-		monitor = new Object();
 		
 	}
 	
@@ -21,7 +20,7 @@ public class MonitorThreadSynch {
         	   numWaiting ++;
         	   index = parties - numWaiting;
         	   if(index == 0){
-        		   monitor.notifyAll();
+        		   notifyAll();
         		   numWaiting=0;
         	   }
         	   else{

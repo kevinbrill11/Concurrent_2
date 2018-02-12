@@ -4,7 +4,7 @@ public class testThreadSynch implements Runnable {
 	
 	final MonitorThreadSynch gate;
 	
-	public testThreadSynch(MonitorThreadSynch gate) {
+	public testThreadSynch(ThreadSynch gate) {
 		this.gate = gate;
 	}
 	
