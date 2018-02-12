@@ -13,6 +13,7 @@ public class ThreadSynch {
 	public ThreadSynch(int parties) {
 		this.parties = parties;
 		
+		sem = new Semaphore(parties); //keeps track of waiting
 		
 		block = new Semaphore(0);
 		lock = new Semaphore(1);
