@@ -1,0 +1,64 @@
+/*
+ * EID's of group members
+ * 
+ */
+import java.util.concurrent.Semaphore; // for implementation using Semaphores
+
+public class ThreadSynch {
+	private int parties;
+	private Semaphore sem;
+	private Semaphore lock;
+	private int numWaiting;
+	
+	private Semaphore nextSem;
+	private int nextWaiting;
+	
+	public ThreadSynch(int parties) {
+		this.parties = parties;
+		
+		sem = new Semaphore(parties);
+		nextSem = new Semaphore(parties);
+		lock = new Semaphore(1);
+		
+		numWaiting = 0;
+		nextWaiting = 0;
+		
+		
+	}
+	
+	public int await() throws InterruptedException {
+		// Waits until all parties have invoked await on this ThreadSynch.
+		// If the current thread is not the last to arrive then it is
+		// disabled for thread scheduling purposes and lies dormant until the last thread arrives.
+		// Returns: the arrival index of the current thread, where index
+		// (parties - 1) indicates the first to arrive and zero indicates
+		// the last to arrive.
+        sem.acquire();
+   		lock.acquire();
+   		numWaiting++;
+   		int index = parties - numWaiting;
+   		lock.release();
+   		
+   		//threads synchronized, all threads move on
+   		if(numWaiting >= parties){
+   			nextSem.release(parties);
+   		}
+   		
+   		nextSem.acquire();
+		lock.acquire();
+		nextWaiting++;
+		nextSem.release();
+		if(nextWaiting==parties){
+			sem.release(parties);
+			nextWaiting=0;
+			numWaiting=0;
+			nextSem.acquire(parties);
+		}
+		lock.release();
+   		
+   		
+           
+          // you need to write this code
+	    return index;
+	}
+}
