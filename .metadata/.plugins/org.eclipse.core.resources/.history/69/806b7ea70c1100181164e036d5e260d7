@@ -1,6 +1,5 @@
 public class PriorityQueue {
-	
-	
+
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
 	}
@@ -10,7 +9,6 @@ public class PriorityQueue {
         // Returns the current position in the list where the name was inserted;
         // otherwise, returns -1 if the name is already present in the list.
         // This method blocks when the list is full.
-		
 		return 0;
 	}
 

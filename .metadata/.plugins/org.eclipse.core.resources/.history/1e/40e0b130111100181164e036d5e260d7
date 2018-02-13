@@ -31,20 +31,16 @@ public class ThreadSynch {
 		lock.acquire();
 		numWaiting++;
 		index = parties - numWaiting;
+		lock.release();
 		if(index == 0){
 			nextBlock.release(parties);
 			numWaiting=0;
 
 		}
-		lock.release();
-
-		
 		nextBlock.acquire();
-		
 		lock.acquire();
 		numwaiting2++;
 		nextBlock.release();
-		
 		if(numwaiting2==parties){
 			block.release(parties);
 			numwaiting2=0;

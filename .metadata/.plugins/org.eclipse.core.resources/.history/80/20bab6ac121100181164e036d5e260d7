@@ -40,11 +40,9 @@ public class ThreadSynch {
 
 		
 		nextBlock.acquire();
-		
 		lock.acquire();
 		numwaiting2++;
 		nextBlock.release();
-		
 		if(numwaiting2==parties){
 			block.release(parties);
 			numwaiting2=0;

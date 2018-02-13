@@ -14,10 +14,14 @@ public class ThreadSynch {
 	private Semaphore nextBlock;
 	
 	public ThreadSynch(int parties) {
-		this.parties = parties;	
+		this.parties = parties;
+				
 		block = new Semaphore(parties);
 		nextBlock = new Semaphore(0);
+		
+		
 		lock = new Semaphore(1);
+		
 		numWaiting = 0;
 		numwaiting2=0;
 		
@@ -26,27 +30,34 @@ public class ThreadSynch {
 	}
 	
 	public int await() throws InterruptedException {
+		// Waits until all parties have invoked await on this ThreadSynch.
+		// If the current thread is not the last to arrive then it is
+		// disabled for thread scheduling purposes and lies dormant until the last thread arrives.
+		// Returns: the arrival index of the current thread, where index
+		// (parties - 1) indicates the first to arrive and zero indicates
+		// the last to arrive.
 		int index = 0;
-		block.acquire();
-		lock.acquire();
-		numWaiting++;
-		index = parties - numWaiting;
-		if(index == 0){
-			nextBlock.release(parties);
+   		lock.acquire();
+   		numWaiting++;
+   		index = parties - numWaiting;
+
+   		if(index == 0){
+   			block.release(parties);
 			numWaiting=0;
+   		}
+		lock.release();  		
 
-		}
-		lock.release();
-
-		
-		nextBlock.acquire();
-		
-		lock.acquire();
+   		block.acquire();
+   		nextBlock.acquire();
+	
+   		lock.acquire();
 		numwaiting2++;
 		nextBlock.release();
 		
+		//This guy was the last guy in previous round
 		if(numwaiting2==parties){
 			block.release(parties);
+			numWaiting=0;
 			numwaiting2=0;
 			nextBlock.acquire(parties);
 		}
