@@ -1,6 +1,7 @@
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PriorityQueue {
+
 	class Node{
 		String name;
 		int priority;
@@ -16,6 +17,7 @@ public class PriorityQueue {
 	Node head;
 	Node tail;
 	ReentrantLock enqLock, deqLock;
+
 	
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
@@ -29,6 +31,7 @@ public class PriorityQueue {
         // otherwise, returns -1 if the name is already present in the list.
         // This method blocks when the list is full.
 		Node newNode = new Node(name, priority);
+
 		return 0;
 	}
 
