@@ -149,9 +149,9 @@ public class PriorityQueue {
 		head.nodeLock.unlock();
 		head = head.next;
 		
-		lock2.lock();
+		lock1.lock();
 		notFull.signal();
-		lock2.unlock();
+		lock1.unlock();
 		
 		head.nodeLock.unlock();
 		return retStr;

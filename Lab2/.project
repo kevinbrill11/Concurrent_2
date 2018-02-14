@@ -26,6 +26,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/MonitorThreadSynch.java</locationURI>
 		</link>
 		<link>
+			<name>src/PriQueueTest.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PriQueueTest.java</locationURI>
+		</link>
+		<link>
 			<name>src/PriorityQueue.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PriorityQueue.java</locationURI>

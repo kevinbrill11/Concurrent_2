@@ -27,12 +27,10 @@ public class PriorityQueue {
 	Node head;
 	//Node tail;
 	final ReentrantLock lock1 = new ReentrantLock();
-	final ReentrantLock lock2 = new ReentrantLock();
-
-	
 	final Condition notFull = lock2.newCondition();
 	final Condition notEmpty = lock1.newCondition();
 	
+	final ReentrantLock lock2 = new ReentrantLock();
 	
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
@@ -149,9 +147,9 @@ public class PriorityQueue {
 		head.nodeLock.unlock();
 		head = head.next;
 		
-		lock2.lock();
+		lock1.lock();
 		notFull.signal();
-		lock2.unlock();
+		lock1.unlock();
 		
 		head.nodeLock.unlock();
 		return retStr;
