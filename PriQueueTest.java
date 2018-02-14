@@ -38,7 +38,7 @@ public class PriQueueTest implements Runnable{
 
 	@Override
 	public void run() {
-		q.add(names[(int)(Math.random()*10)], (int)(Math.random()*10));
-		
+		//q.add(names[(int)(Math.random()*10)], (int)(Math.random()*10));
+		q.getFirst();
 	}
 }

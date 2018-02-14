@@ -28,6 +28,7 @@ public class PriorityQueue {
 	//Node tail;
 	final ReentrantLock lock1 = new ReentrantLock();
 	final ReentrantLock lock2 = new ReentrantLock();
+	final ReentrantLock sizeLock = new ReentrantLock();
 
 	
 	final Condition notFull = lock2.newCondition();
@@ -37,7 +38,7 @@ public class PriorityQueue {
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
 		this.maxSize = maxSize;
-		size = 0;
+		size = 1;
 		head = new Node(" ", -1);
 		head.next = null;
 		//tail = head;
@@ -48,8 +49,16 @@ public class PriorityQueue {
     // otherwise, returns -1 if the name is already present in the list.
     // This method blocks when the list is full.
 	public int add(String name, int priority) {
-        System.out.println(getSize());
+        System.out.println(size);
 		Node newNode = new Node(name, priority);
+		if(head == null){
+			head = newNode;
+			head.next = null;
+			sizeLock.lock();
+			size++;
+			sizeLock.unlock();
+			return 0;
+		}
 		Node current = head;
 		current.nodeLock.lock();
 		int i = 0;
@@ -59,7 +68,7 @@ public class PriorityQueue {
 //			current.next.nodeLock.unlock();
 			return -1;
 		}
-		//if first node
+		//if first node, doesn't change size
 		if(getSize() == 1 && current.getName() == " "){
 			current.name = name;
 			current.pri=priority;
@@ -69,15 +78,28 @@ public class PriorityQueue {
 		
 		/* priority of new node is higher than priority of head*/
 		if(head.getPriority() < priority){
+			while(size == (maxSize-1)){
+				try {
+					System.out.println("is FUll");
+					lock2.lock();
+					notFull.await();
+					lock2.unlock();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			newNode.next = head;
 			head.nodeLock.unlock();
 			head = newNode;
+			sizeLock.lock();
+			size++;
+			sizeLock.unlock();
 			return 0;
 		}
 		else{
 			while(current.next != null && current.getPriority() >= priority && current.next.getPriority() >= priority){
 				
-				while(getSize() == (maxSize-1)){
+				while(size == (maxSize)){
 					try {
 						System.out.println("is FUll");
 						lock2.lock();
@@ -96,7 +118,9 @@ public class PriorityQueue {
 			}
 			newNode.next = current.next;
 	        current.next = newNode;
-	        
+	        sizeLock.lock();
+			size++;
+			sizeLock.unlock();
 	        lock1.lock();
 	        notEmpty.signal();
 	        lock1.unlock();
@@ -118,6 +142,7 @@ public class PriorityQueue {
 			if(current.getName().equals(name)){
 				current.nodeLock.unlock();
 				current.next.nodeLock.unlock();
+				
 				return i;
 			}
 			current.nodeLock.unlock();
@@ -133,10 +158,16 @@ public class PriorityQueue {
     // Retrieves and removes the name with the highest priority in the list,
     // or blocks the thread if the list is empty.
 	public String getFirst() {
-		head.nodeLock.lock();
-		head.next.nodeLock.lock();
-		while(getSize() == 0){
+		System.out.println("yeet");
+		if(head == null)
+			//CLARENCE: RETURN AND BLOCK SOME SHIT
+			head.nodeLock.lock();
+//		if(head.next != null){
+//			head.next.nodeLock.lock();
+//		}
+		while(size == 0){
 			try {
+				System.out.println("ain't got no sheeeeit");
 				lock1.lock();
 				notEmpty.await();
 				lock1.unlock();
@@ -148,12 +179,14 @@ public class PriorityQueue {
 		String retStr = head.getName();
 		head.nodeLock.unlock();
 		head = head.next;
-		
+		sizeLock.lock();
+		size--;
+		sizeLock.unlock();
 		lock2.lock();
 		notFull.signal();
 		lock2.unlock();
 		
-		head.nodeLock.unlock();
+//		head.nodeLock.unlock();
 		return retStr;
 	}
 
