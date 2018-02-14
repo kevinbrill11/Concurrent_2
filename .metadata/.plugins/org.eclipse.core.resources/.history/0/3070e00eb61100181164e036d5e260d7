@@ -69,7 +69,7 @@ public class PriorityQueue {
 			return -1;
 		}
 		//if first node, doesn't change size
-		if(size == 1 && current.getName() == " "){
+		if(getSize() == 1 && current.getName() == " "){
 			current.name = name;
 			current.pri=priority;
 			current.nodeLock.unlock();
@@ -158,7 +158,8 @@ public class PriorityQueue {
     // Retrieves and removes the name with the highest priority in the list,
     // or blocks the thread if the list is empty.
 	public String getFirst() {
-		while(head == null){
+		System.out.println("yeet");
+		if(head == null){
 			try {
 				System.out.println("ain't got no sheeeeit");
 				lock1.lock();
@@ -169,7 +170,8 @@ public class PriorityQueue {
 				e.printStackTrace();
 			}
 		}
-		head.nodeLock.lock();
+			//CLARENCE: RETURN AND BLOCK SOME SHIT
+			head.nodeLock.lock();
 //		if(head.next != null){
 //			head.next.nodeLock.lock();
 //		}

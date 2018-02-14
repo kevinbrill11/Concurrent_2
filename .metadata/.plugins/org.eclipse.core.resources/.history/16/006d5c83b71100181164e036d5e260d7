@@ -38,12 +38,7 @@ public class PriQueueTest implements Runnable{
 
 	@Override
 	public void run() {
-		if(q.size == q.maxSize ){
-			q.getFirst();
-		}
-		else{
-			q.add(names[(int)(Math.random()*10)], (int)(Math.random()*10));
-
-		}
+		q.add(names[(int)(Math.random()*10)], (int)(Math.random()*10));
+		
 	}
 }

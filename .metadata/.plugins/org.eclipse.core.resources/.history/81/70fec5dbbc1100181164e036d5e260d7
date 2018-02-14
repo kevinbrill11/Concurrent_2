@@ -69,7 +69,7 @@ public class PriorityQueue {
 			return -1;
 		}
 		//if first node, doesn't change size
-		if(size == 1 && current.getName() == " "){
+		if(getSize() == 1 && current.getName() == " "){
 			current.name = name;
 			current.pri=priority;
 			current.nodeLock.unlock();
