@@ -5,24 +5,34 @@ public class PriorityQueue {
 	class Node{
 		String name;
 		int priority;
-
+		Node next;
+		ReentrantLock nodeLock;
 		public Node(String name, int priority){
 			this.name = name;
 			this.priority = priority;
-			Node next = null;
+			next = null;
+			nodeLock = new ReentrantLock();
+		}
+		public String getName(){
+			return name;
+		}
+		public int getPriority(){
+			return priority;
 		}
 	}
 	
 	int size;
 	Node head;
 	Node tail;
-	ReentrantLock enqLock, deqLock;
+	ReentrantLock lock1, lock2;
 
 	
 	public PriorityQueue(int maxSize) {
         // Creates a Priority queue with maximum allowed size as capacity
 		size = maxSize;
-		head = null;
+		head = new Node(null, -1);
+		head.next = null;
+		tail = head;
 	}
 
 	public int add(String name, int priority) {
@@ -31,6 +41,15 @@ public class PriorityQueue {
         // otherwise, returns -1 if the name is already present in the list.
         // This method blocks when the list is full.
 		Node newNode = new Node(name, priority);
+		head.nodeLock.lock();
+		if(head.next != null){
+			head.next.nodeLock.lock();
+		}
+		if(head.getPriority() < priority){
+			newNode.next = head;
+			head = newNode;
+		}
+		
 
 		return 0;
 	}
