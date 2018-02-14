@@ -1,6 +1,6 @@
 import java.lang.Math;
 public class PriQueueTest implements Runnable{
-	static PriorityQueue q = new PriorityQueue(5);
+	static PriorityQueue q = new PriorityQueue(3);
 	String[] names = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
 	public static void main(String[] args){
 		PriQueueTest t1 = new PriQueueTest();
@@ -39,9 +39,11 @@ public class PriQueueTest implements Runnable{
 	@Override
 	public void run() {
 		if(q.size == q.maxSize ){
+			System.out.println("Removing.");
 			q.getFirst();
 		}
 		else{
+			System.out.println("Adding.");
 			q.add(names[(int)(Math.random()*10)], (int)(Math.random()*10));
 
 		}

@@ -78,7 +78,8 @@ public class PriorityQueue {
 		
 		/* priority of new node is higher than priority of head*/
 		if(head.getPriority() < priority){
-			while(size == (maxSize-1)){
+			
+			while(size == (maxSize)){
 				try {
 					System.out.println("is FUll");
 					lock2.lock();
@@ -88,6 +89,7 @@ public class PriorityQueue {
 					e.printStackTrace();
 				}
 			}
+			
 			newNode.next = head;
 			head.nodeLock.unlock();
 			head = newNode;
@@ -175,7 +177,7 @@ public class PriorityQueue {
 //		}
 		while(size == 0){
 			try {
-				System.out.println("ain't got no sheeeeit");
+				System.out.println("no elements");
 				lock1.lock();
 				notEmpty.await();
 				lock1.unlock();
