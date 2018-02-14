@@ -33,15 +33,13 @@ public class ThreadSynch {
 		if( index == 0){
 			block.release(parties);
 			numWaiting = 0;
-			block = new Semaphore(0);
 			lock.release();
-
 		}
 		else{
 			lock.release();
-			block.acquire();
-
 		}
+		
+		block.acquire();
 	    return index;
 	}
 }

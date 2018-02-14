@@ -15,7 +15,7 @@ public class ThreadSynch {
 	
 	public ThreadSynch(int parties) {
 		this.parties = parties;	
-		block = new Semaphore(0);
+		block = new Semaphore(parties);
 		nextBlock = new Semaphore(0);
 		lock = new Semaphore(1);
 		numWaiting = 0;
@@ -33,15 +33,11 @@ public class ThreadSynch {
 		if( index == 0){
 			block.release(parties);
 			numWaiting = 0;
-			block = new Semaphore(0);
-			lock.release();
-
 		}
-		else{
-			lock.release();
-			block.acquire();
-
-		}
+		lock.release();
+		
+		
+		block.acquire();
 	    return index;
 	}
 }

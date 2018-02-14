@@ -34,14 +34,13 @@ public class ThreadSynch {
 			block.release(parties);
 			numWaiting = 0;
 			block = new Semaphore(0);
-			lock.release();
-
 		}
-		else{
+		
 			lock.release();
 			block.acquire();
 
-		}
+		
+		
 	    return index;
 	}
 }

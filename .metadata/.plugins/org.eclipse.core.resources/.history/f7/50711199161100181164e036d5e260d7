@@ -15,7 +15,7 @@ public class ThreadSynch {
 	
 	public ThreadSynch(int parties) {
 		this.parties = parties;	
-		block = new Semaphore(0);
+		block = new Semaphore(parties);
 		nextBlock = new Semaphore(0);
 		lock = new Semaphore(1);
 		numWaiting = 0;
@@ -27,21 +27,30 @@ public class ThreadSynch {
 	
 	public int await() throws InterruptedException {
 		int index = 0;
+		block.acquire();
 		lock.acquire();
-		numWaiting ++;
+		numWaiting++;
 		index = parties - numWaiting;
-		if( index == 0){
+		if(index == 0){
+			nextBlock.release(parties);
+			numWaiting=0;
+
+		}
+		lock.release();
+
+		
+		nextBlock.acquire();
+		
+		lock.acquire();
+		numwaiting2++;
+		nextBlock.release();
+		
+		if(numwaiting2==parties){
 			block.release(parties);
-			numWaiting = 0;
-			block = new Semaphore(0);
-			lock.release();
-
+			numwaiting2=0;
+			nextBlock.acquire(parties);
 		}
-		else{
-			lock.release();
-			block.acquire();
-
-		}
+		lock.release();
 	    return index;
 	}
 }

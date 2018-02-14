@@ -1,0 +1,44 @@
+import java.util.concurrent.Semaphore;
+
+/*
+ * EID's of group members
+ *
+ */
+public class ThreadSynch {
+	private Semaphore waitForAll;
+	private Semaphore criticalSection;
+	private int numWaiting;
+	private int parties;
+
+
+	public ThreadSynch(int parties) {
+		waitForAll = new Semaphore(0);
+		criticalSection = new Semaphore(1);
+//		System.out.println("[Start] Available wait permits: " + waitForAll.availablePermits());
+
+		numWaiting = 0;
+		this.parties = parties;
+	}
+
+	public int await() throws InterruptedException {
+		criticalSection.acquire();
+		numWaiting++;
+		int index = parties - numWaiting;
+		if(index == 0) {
+			numWaiting = 0;
+			releaseWaitForAll();
+			criticalSection.release();
+		} else {
+			criticalSection.release();
+			waitForAll.acquire();
+		}
+		return index;
+	}
+
+	private void releaseWaitForAll() {
+		for(int i = 0; i < parties; i++) {
+			waitForAll.release();
+		}
+		waitForAll = new Semaphore(0);
+	}
+}
