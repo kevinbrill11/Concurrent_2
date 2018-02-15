@@ -135,6 +135,9 @@ public class PriorityQueue {
     // Returns the position of the name in the list;
     // otherwise, returns -1 if the name is not found.
 	public int search(String name) {
+		if(head == null){
+			return -1;
+		}
 		Node current = head;
 		head.nodeLock.lock();
 		int i = 0;
@@ -202,14 +205,19 @@ public class PriorityQueue {
 
 
 	public void print() {
+		if(head != null){
 		Node current = head;
 		head.nodeLock.lock();
+		
+	
 		while(current.next != null){
 			System.out.println("name: " + current.getName() + " priority: " + current.getPriority());
 			current = current.next;
 		
 		}
 		System.out.println("name: " + current.getName() + " priority: " + current.getPriority());
+		}
+		
 	}
 	public int getSize(){
 		int size = 1;
